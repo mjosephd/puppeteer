@@ -40,11 +40,6 @@ export async function downloadBrowser(): Promise<void> {
     process.env.PUPPETEER_DOWNLOAD_PATH ||
     process.env.npm_config_puppeteer_download_path ||
     process.env.npm_package_config_puppeteer_download_path;
-  console.log("START LOG");
-  console.log(process.env.PUPPETEER_PRODUCT);
-  console.log(process.env.npm_config_puppeteer_product);
-  console.log(process.env.npm_package_config_puppeteer_product);
-  console.log(product);
   const browserFetcher = (puppeteer as PuppeteerNode).createBrowserFetcher({
     product,
     host: downloadHost,
@@ -163,18 +158,13 @@ export async function downloadBrowser(): Promise<void> {
       );
       https
         .get(firefoxVersions, (r) => {
-          consoe.log('got firefox');
-          console.log(r);
           if (r.statusCode >= 400)
             return reject(new Error(`Got status code ${r.statusCode}`));
           r.on('data', (chunk) => {
             data += chunk;
           });
           r.on('end', () => {
-            console.log('firefox data');
-            console.log(data);
             try {
-              console.log('start parse');
               const versions = JSON.parse(data);
               return resolve(versions.FIREFOX_NIGHTLY);
             } catch {
